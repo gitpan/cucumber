@@ -7,7 +7,7 @@ use Getopt::Long;
 use File::Find;
 
 use vars qw($VERSION);
-$VERSION = 0.1;
+$VERSION = 0.2;
 
 sub help {
     my $message = shift;
@@ -305,29 +305,29 @@ __END__
 
 =head1 NAME
 
-cucumber.pl - A Perl implementation of Aslak Hellesøy's cucumber
+cucumber.pl - A Perl implementation of Aslak Hellesøy's Cucumber BDD framework.
 
 =head1 SYNOPSIS
 
-Assuming you have your features in './features/' and your steps in './features/steps/', you can run your cucumber tests like this:
+Assuming you have your features in './features/' and your steps in './features/steps/', you can run your Cucumber tests like this:
 
- $ cucumber.pl
+ cucumber.pl
 
 If your features and steps are in another directory, you can manually define them:
 
- $ cucumber.pl --features=/dir/with/features --steps=/dir/with/steps
+ cucumber.pl --features=/dir/with/features --steps=/dir/with/steps
 
 Should you with to run a particular feature file, you can pass a single file:
 
- $ cucumber.pl --feature_file=/some/file.feature
+ cucumber.pl --feature_file=/some/file.feature
 
 If you want to run only tagged scenarios, you can define the tag:
 
- $ cucumber.pl --tag=some_tag
+ cucumber.pl --tag=some_tag
 
 To run, say, steps from a particular location and only given scenarios in a given file...
 
- $ cucumber.pl --steps=/dir/with/steps --tag=some_tag --feature_file=/some/file.feature
+ cucumber.pl --steps=/dir/with/steps --tag=some_tag --feature_file=/some/file.feature
 
 The directories defined with the '--steps' and '--features' and searched recursively for files with containing '_steps.pl' and '.feature' on the end respectively. All other files are ignored. For example...
 
@@ -336,9 +336,9 @@ The directories defined with the '--steps' and '--features' and searched recursi
 
 =head1 CUCUMBER DESCRIPTION
 
-Having fallen in love with the cucumber BDD suite for Rails, I thought it would be nice to have some basic implementation in Perl.
+Having been impressed by the Cucumber Behavoir Driven Development (BDD) suite for Rails, I thought it would be nice to have some basic implementation in Perl.
 
-I won't go into much detail regarding cucumber itself as it's quite weird and there are websites that better explain but the gist of it is this. For BDD, you have non-developers (ideally) writing your tests. Not only does this cut down on development effort but also means no more 80 page func specs!
+I won't go into much detail regarding Cucumber itself but there are websites that explain it well but the gist of it is this (SEE ALSO): For BDD, you have non-developers (ideally) writing your tests. Not only does this cut down on development effort but also means no more 80 page func specs!
 
 The structure is split down as features (the human readable test) and your steps, which will execute the actual code. Features are split into "Given", "When" and "Then". "Given" is your context (e.g. "Given I am on the home page"). "When" is the action performed (e.g. "When I click on 'blog'") and "Then" s your result check (e.g. "Then I should see 'my blogs'"). Wicked, init?
 
@@ -355,56 +355,57 @@ The feature file must have the extension of ".feature" and for simplicity we'll 
 
 So now lets have this actually do something. To do this, we need to create our step file. We'll call it "homepage_steps.pl" and it should live in "./features/steps/".
 
-use Test::More qw(no_plan); # we'll use this for our tests
-use HTTP::Request;
+ use Test::More qw(no_plan); # we'll use this for our tests
+ use HTTP::Request;
 
-Given qr/^I am on the home page$/, sub {
-    $html = HTTP::Request->new('GET' => 'http://www.advancethinking.com');
-    # see "MR T" for details on the "%T" hash.
-    ok($html, $T{-name});
-};
+ Given qr/^I am on the home page$/, sub {
+     $html = HTTP::Request->new('GET' => 'http://www.advancethinking.com');
+     # see "MR T" for details on the "%T" hash.
+     ok($html, $T{-name});
+ };
 
-# any matches are passed in as parameters to the callback given below.
-When qr/^I click on "(.+)"$/, sub {
-    my $urlLabel = shift;
-    # $urlLabel #=> blogs
-    my $content = $html->content(); # $html remains persistant
+ # any matches are passed in as parameters to the callback given below.
+ When qr/^I click on "(.+)"$/, sub {
+     my $urlLabel = shift;
+     # $urlLabel #=> blogs
+     my $content = $html->content(); # $html remains persistant
 
-    # yeah yeah, hacky
-    $content =~ /href="(.+)">$urlLabel</;
+     # yeah yeah, hacky
+     $content =~ /href="(.+)">$urlLabel</;
 
-    $html = HTTP::Request->new('GET' => $1);
+     $html = HTTP::Request->new('GET' => $1);
 
-    ok($html, $T{-name});
-};
+     ok($html, $T{-name});
+ };
 
-Then qr/^I will see "(.+)"$/, sub {
-    my $pageTitle = shift;
+ Then qr/^I will see "(.+)"$/, sub {
+     my $pageTitle = shift;
 
-    like(
-        $html->content,
-        qr/title>$pageTitle</
-    );
-};
+     like(
+         $html->content,
+         qr/title>$pageTitle</
+     );
+ };
 
 Easy, init? Note: i've not actually tested the above! Have a look in 't/features/' of the distro to see simple examples.
 
 What if you want to go multiple "Givens", "Whens" or "Thens"?? Well, that's easy, use an "And" or "But". For example
 
-Scenario: When I was born
-  Given my mother is pregnant
-  And she is going in to labor
-  When she visits hospital
-  And so does my father
-  Then I will be born
-  And I will be a man
-  But I will not be a woman
+ Scenario: When I was born
+   Given my mother is pregnant
+   And she is going in to labor
+   When she visits hospital
+   And so does my father
+   Then I will be born
+   And I will be a man
+   But I will not be a woman
 
 "But" and "And" will repeat the previous step type. They are also technically identical but look pretty.
 
 =head1 MR T
 
 This ambiguously but short named hash table is global and available within your steps. It contains information about the current feature and step that is being run. It has the following keys...
+
  -name => this is a string for convenience in your tests. It contains the current scenario and step (given, when, then string).
  -step => the string of the step (e.g. "Given I am on the home page").
  -stepType => the "type" of step ("Given", "Then" or "When").
@@ -415,11 +416,11 @@ This ambiguously but short named hash table is global and available within your 
 
 =head1 SEE ALSO
 
-Wow, where to begin?! Look in the 't/features' directory for some simple examples. Also look at the following webpages (if you don't like Ruby, look away now...):
+Just to scratch the surface, look in the 't/features' directory for some simple examples. Also look at the following webpages (mostly Ruby & Java):
 
   Cucumber home page: http://cukes.info/
   BDD & Dan North: http://dannorth.net/introducing-bdd
-  Mandatory Wikipedia Page: http://en.wikipedia.org/wiki/Behavior_Driven_Development
+  Wikipedia Page: http://en.wikipedia.org/wiki/Behavior_Driven_Development
   Test::More (not mandatory but certainly useful): http://search.cpan.org/~mschwern/Test-Simple-0.86/lib/Test/More.pm
 
 =head1 TODO
@@ -429,9 +430,9 @@ Wow, where to begin?! Look in the 't/features' directory for some simple example
  - Better, more modular code and make into distributable module.
  - Grab the usefully named "Test::Cucumber" AND ACTUALLY PUT SOMETHING THERE!! (FFS)
 
-=head1 SPECIAL THANKS
+=head1 THANKS
 
-To Dan North for BDD, Aslak Hellesøy for cucumber, ThoughtWorks for showing me cucumber and development at the REA Group (http://www.rea-group.com.au) for being my guineapigs.
+To Dan North for BDD and Aslak Hellesøy for Cucumber.
 
 I better get out of bed an enjoy my birthday now!
 
