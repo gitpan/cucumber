@@ -7,7 +7,7 @@ use Getopt::Long;
 use File::Find;
 
 use vars qw($VERSION);
-$VERSION = 0.2;
+$VERSION = 0.3;
 
 sub help {
     my $message = shift;
@@ -317,7 +317,7 @@ If your features and steps are in another directory, you can manually define the
 
  cucumber.pl --features=/dir/with/features --steps=/dir/with/steps
 
-Should you with to run a particular feature file, you can pass a single file:
+Should you wish to run a particular feature file, you can pass a single file:
 
  cucumber.pl --feature_file=/some/file.feature
 
@@ -325,29 +325,29 @@ If you want to run only tagged scenarios, you can define the tag:
 
  cucumber.pl --tag=some_tag
 
-To run, say, steps from a particular location and only given scenarios in a given file...
+To run steps from a particular location and only given scenarios in a given file...
 
  cucumber.pl --steps=/dir/with/steps --tag=some_tag --feature_file=/some/file.feature
 
-The directories defined with the '--steps' and '--features' and searched recursively for files with containing '_steps.pl' and '.feature' on the end respectively. All other files are ignored. For example...
+The directories defined with the '--steps' and '--features' are searched recursively for files with containing '_steps.pl' and '.feature' on the end respectively. All other files are ignored. For example...
 
  using_my_website_steps.pl
  my_tests.feature
 
 =head1 CUCUMBER DESCRIPTION
 
-Having been impressed by the Cucumber Behavoir Driven Development (BDD) suite for Rails, I thought it would be nice to have some basic implementation in Perl.
+Having been impressed by the Cucumber Behavior Driven Development (BDD) suite for Rails, I thought it would be nice to have some basic implementation in Perl.
 
-I won't go into much detail regarding Cucumber itself but there are websites that explain it well but the gist of it is this (SEE ALSO): For BDD, you have non-developers (ideally) writing your tests. Not only does this cut down on development effort but also means no more 80 page func specs!
+I won't go into much detail regarding Cucumber itself as there are websites that explain it well but the gist of it is this (see "SEE ALSO"): For BDD, you have non-developers (ideally) writing your tests. Not only does this cut down on development effort but also means no more 80 page func specs!
 
-The structure is split down as features (the human readable test) and your steps, which will execute the actual code. Features are split into "Given", "When" and "Then". "Given" is your context (e.g. "Given I am on the home page"). "When" is the action performed (e.g. "When I click on 'blog'") and "Then" s your result check (e.g. "Then I should see 'my blogs'"). Wicked, init?
+The structure is split down as features (the human readable test) and your steps, which will execute the actual code. Features are split into "Given", "When" and "Then". "Given" is your context (e.g. "Given I am on the home page"). "When" is the action performed (e.g. "When I click on 'blog'") and "Then" is your result check (e.g. "Then I should see 'my blogs'"). Wicked, init?
 
 So lets see what our feature file for this will look like:
 
-Scenario: I want to see my blog
-  Given I am on the home page
-  When I click on "blogs"
-  Then I will see "my blogs"
+ Scenario: I want to see my blog
+   Given I am on the home page
+   When I click on "blogs"
+   Then I will see "my blogs"
 
 A feature file will contain many related "scenarios". The scenario is meta data and is used as an overall description of the task.
 
@@ -387,9 +387,9 @@ So now lets have this actually do something. To do this, we need to create our s
      );
  };
 
-Easy, init? Note: i've not actually tested the above! Have a look in 't/features/' of the distro to see simple examples.
+Easy, init? Note: I've not actually tested the above! Have a look in 't/features/' of the distro to see simple examples.
 
-What if you want to go multiple "Givens", "Whens" or "Thens"?? Well, that's easy, use an "And" or "But". For example
+What if you want to do multiple "Givens", "Whens" or "Thens"?? Well, that's easy, use an "And" or "But". For example
 
  Scenario: When I was born
    Given my mother is pregnant
