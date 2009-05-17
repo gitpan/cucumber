@@ -7,7 +7,7 @@ use Getopt::Long;
 use File::Find;
 
 use vars qw($VERSION);
-$VERSION = 0.3;
+$VERSION = 0.4;
 
 sub help {
     my $message = shift;
@@ -329,7 +329,7 @@ To run steps from a particular location and only given scenarios in a given file
 
  cucumber.pl --steps=/dir/with/steps --tag=some_tag --feature_file=/some/file.feature
 
-The directories defined with the '--steps' and '--features' are searched recursively for files with containing '_steps.pl' and '.feature' on the end respectively. All other files are ignored. For example...
+The directories defined with '--steps' and '--features' are searched recursively for filenames that have '_steps.pl' and '.feature' on the end respectively. All other files are ignored. For example...
 
  using_my_website_steps.pl
  my_tests.feature
@@ -404,7 +404,7 @@ What if you want to do multiple "Givens", "Whens" or "Thens"?? Well, that's easy
 
 =head1 MR T
 
-This ambiguously but short named hash table is global and available within your steps. It contains information about the current feature and step that is being run. It has the following keys...
+%T is an ambiguously but short named hash table that is global and available within your steps. It contains information about the current feature and step that is being run. It has the following keys...
 
  -name => this is a string for convenience in your tests. It contains the current scenario and step (given, when, then string).
  -step => the string of the step (e.g. "Given I am on the home page").
@@ -425,10 +425,10 @@ Just to scratch the surface, look in the 't/features' directory for some simple 
 
 =head1 TODO
 
- - Add support for "Feature:".
- - Case insensitivity
+ - Add support for "Feature:" and other such Cucumberisms.
+ - Case insensitivity.
  - Better, more modular code and make into distributable module.
- - Grab the usefully named "Test::Cucumber" AND ACTUALLY PUT SOMETHING THERE!! (FFS)
+ - Grab the usefully named "Test::Cucumber" and maybe do something useful with it.
 
 =head1 THANKS
 
@@ -440,6 +440,6 @@ I better get out of bed an enjoy my birthday now!
 
 Copyright (c) 2009 Stephen Hardisty <moowahaha@hotmail.com>
 
-This product is free and distributed under the Gnu Public License (GPL).  A copy of this license was included in this distribution in a file called LICENSE.  If for some reason, this file was not included, please see F<http://www.gnu.org/licenses/> to obtain a copy of this license.
+This software is Free software and may be used and redistributed under the same terms as Perl itself.
 
 =cut
